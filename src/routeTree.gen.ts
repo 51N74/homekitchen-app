@@ -9,13 +9,26 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as OrdersRouteImport } from './routes/orders'
+import { Route as FavoritesRouteImport } from './routes/favorites'
 import { Route as CartRouteImport } from './routes/cart'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as MenuMenuIdRouteImport } from './routes/menu.$menuId'
 
+const ProfileRoute = ProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const OrdersRoute = OrdersRouteImport.update({
   id: '/orders',
   path: '/orders',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FavoritesRoute = FavoritesRouteImport.update({
+  id: '/favorites',
+  path: '/favorites',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CartRoute = CartRouteImport.update({
@@ -28,44 +41,83 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MenuMenuIdRoute = MenuMenuIdRouteImport.update({
+  id: '/menu/$menuId',
+  path: '/menu/$menuId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/cart': typeof CartRoute
+  '/favorites': typeof FavoritesRoute
   '/orders': typeof OrdersRoute
+  '/profile': typeof ProfileRoute
+  '/menu/$menuId': typeof MenuMenuIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/cart': typeof CartRoute
+  '/favorites': typeof FavoritesRoute
   '/orders': typeof OrdersRoute
+  '/profile': typeof ProfileRoute
+  '/menu/$menuId': typeof MenuMenuIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/cart': typeof CartRoute
+  '/favorites': typeof FavoritesRoute
   '/orders': typeof OrdersRoute
+  '/profile': typeof ProfileRoute
+  '/menu/$menuId': typeof MenuMenuIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/cart' | '/orders'
+  fullPaths:
+    '/' | '/cart' | '/favorites' | '/orders' | '/profile' | '/menu/$menuId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/cart' | '/orders'
-  id: '__root__' | '/' | '/cart' | '/orders'
+  to: '/' | '/cart' | '/favorites' | '/orders' | '/profile' | '/menu/$menuId'
+  id:
+    | '__root__'
+    | '/'
+    | '/cart'
+    | '/favorites'
+    | '/orders'
+    | '/profile'
+    | '/menu/$menuId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   CartRoute: typeof CartRoute
+  FavoritesRoute: typeof FavoritesRoute
   OrdersRoute: typeof OrdersRoute
+  ProfileRoute: typeof ProfileRoute
+  MenuMenuIdRoute: typeof MenuMenuIdRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/profile': {
+      id: '/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof ProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/orders': {
       id: '/orders'
       path: '/orders'
       fullPath: '/orders'
       preLoaderRoute: typeof OrdersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/favorites': {
+      id: '/favorites'
+      path: '/favorites'
+      fullPath: '/favorites'
+      preLoaderRoute: typeof FavoritesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/cart': {
@@ -82,13 +134,23 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/menu/$menuId': {
+      id: '/menu/$menuId'
+      path: '/menu/$menuId'
+      fullPath: '/menu/$menuId'
+      preLoaderRoute: typeof MenuMenuIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   CartRoute: CartRoute,
+  FavoritesRoute: FavoritesRoute,
   OrdersRoute: OrdersRoute,
+  ProfileRoute: ProfileRoute,
+  MenuMenuIdRoute: MenuMenuIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
