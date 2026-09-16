@@ -1,327 +1,258 @@
-<div align="center">
+# HomeKitchen
 
-# 🍽️ HomeKitchen
+A frontend product prototype exploring a food marketplace designed around a constraint that traditional food-delivery platforms often overlook: **home kitchens have limited production capacity.**
 
-**[🇹🇭 ภาษาไทย](#-ภาษาไทย) | [🇬🇧 English](#-english)**
+Instead of treating a kitchen as an unlimited food source, HomeKitchen explores what happens when **capacity, availability, and inventory become first-class parts of the ordering experience.**
 
----
+> **Status:** Frontend prototype / product concept
 
-</div>
+## Why HomeKitchen?
 
----
+Home-based food businesses operate differently from restaurants and large food chains.
 
-## 🇹🇭 ภาษาไทย
+A home kitchen may have a limited number of portions it can prepare in a day. When demand exceeds that capacity, the result can be over-ordering, ingredient shortages, delayed orders, or cancellations.
 
-<div align="center">
+HomeKitchen was built to explore a simple product question:
 
-### HomeKitchen — สั่งอาหารโฮมเมดจากครัวใกล้บ้าน
+**What would a food marketplace look like if kitchen capacity was part of the product model from the beginning?**
 
-แอปสั่งอาหารโฮมคุกที่ช่วยเชื่อมต่อผู้คนกับอาหารทำมือจากครัวในชุมชน  
-สร้างด้วย **React 19**, **TypeScript**, **TailwindCSS v4**, และ **TanStack** ecosystem
+This project was originally built as a frontend project after completing the frontend portion of a full-stack development program.
 
-</div>
+## Product Concept
 
----
+The prototype models a simplified relationship between:
 
-### 📋 สารบัญ
-
-- [ฟีเจอร์หลัก](#-ฟีเจอร์หลัก)
-- [Tech Stack](#-tech-stack-th)
-- [โครงสร้างโปรเจกต์](#-โครงสร้างโปรเจกต์)
-- [การติดตั้งและรันโปรเจกต์](#-การติดตั้งและรันโปรเจกต์)
-- [หน้าต่าง ๆ ในแอป](#-หน้าต่าง-ๆ-ในแอป)
-
----
-
-### ✨ ฟีเจอร์หลัก
-
-| ฟีเจอร์ | รายละเอียด |
-|---|---|
-| 🔍 **ค้นหาเมนู** | ค้นหาแบบ Real-time พร้อม Debounce 300ms ผ่าน URL Search Params |
-| 🗂️ **กรองหมวดหมู่** | กรองเมนูตามหมวดหมู่ (Beef, Chicken, Vegetarian, Seafood, Pasta, Dessert) |
-| 💰 **กรองราคา** | กรองตามช่วงราคา (ต่ำกว่า 150 / 150-200 / สูงกว่า 200 บาท) |
-| 📦 **กรองสต็อก** | แสดงเฉพาะเมนูที่ยังมีพร้อมเสิร์ฟ |
-| 🛒 **ตะกร้าสินค้า** | เพิ่ม/ลด/ลบรายการ พร้อมคำนวณราคารวมและค่าจัดส่ง |
-| ❤️ **รายการโปรด** | กดบันทึกเมนูที่ชื่นชอบ ดูได้ทุกเมื่อ |
-| 📄 **รายละเอียดเมนู** | ดูส่วนผสม วิธีทำ เรตติ้ง เวลาเตรียม และสต็อกแบบ Real-time |
-| 👤 **โปรไฟล์** | แก้ไขข้อมูลส่วนตัว ดูประวัติการสั่งซื้อ |
-| 📜 **ประวัติคำสั่งซื้อ** | บันทึกคำสั่งซื้อทั้งหมดหลัง Checkout |
-
----
-
-### 🛠️ Tech Stack (TH)
-
-**Frontend Core**
-- [React 19](https://react.dev/) — UI Library พร้อม React Compiler
-- [TypeScript ~6.0](https://www.typescriptlang.org/) — Type-safe JavaScript
-- [Vite 8](https://vitejs.dev/) — Build tool และ Dev Server
-
-**Routing & Data Fetching**
-- [TanStack Router v1](https://tanstack.com/router) — Type-safe File-based Routing
-- [TanStack Query v5](https://tanstack.com/query) — Server State Management
-
-**UI & Styling**
-- [TailwindCSS v4](https://tailwindcss.com/) — Utility-first CSS
-- [shadcn/ui](https://ui.shadcn.com/) — Component Library (Base UI)
-- [Lucide React](https://lucide.dev/) — Icon Library
-- [Sonner](https://sonner.emilkowal.ski/) — Toast Notifications
-- [Inter Variable Font](https://rsms.me/inter/) — Typography
-
-**Form & Validation**
-- [React Hook Form v7](https://react-hook-form.com/) — Form Management
-- [Zod v4](https://zod.dev/) — Schema Validation
-
-**State Management**
-- React Context API — CartContext, FavoritesContext
-
----
-
-### 📁 โครงสร้างโปรเจกต์
-
-```
-homekitchen-app/
-├── src/
-│   ├── components/
-│   │   ├── common/
-│   │   │   └── Header.tsx        # Header พร้อม Search Debounce + Cart Badge
-│   │   └── ui/                   # shadcn/ui Components
-│   ├── context/
-│   │   ├── CartContext.tsx        # Global Cart State + Order History
-│   │   └── FavoritesContext.tsx  # Global Favorites State
-│   ├── hooks/
-│   │   ├── useCart.ts            # Hook สำหรับ CartContext
-│   │   └── useFavorites.ts       # Hook สำหรับ FavoritesContext
-│   ├── lib/
-│   │   └── queryClient.ts        # TanStack Query Client Config
-│   ├── routes/
-│   │   ├── __root.tsx            # Root Layout (Header + Providers)
-│   │   ├── index.tsx             # หน้าแรก — รายการเมนูทั้งหมด
-│   │   ├── menu.$menuId.tsx      # หน้ารายละเอียดเมนู (Dynamic Route)
-│   │   ├── cart.tsx              # หน้าตะกร้าสินค้า
-│   │   ├── favorites.tsx         # หน้ารายการโปรด
-│   │   ├── profile.tsx           # หน้าโปรไฟล์และประวัติคำสั่งซื้อ
-│   │   └── orders.tsx            # หน้าประวัติคำสั่งซื้อ
-│   ├── routeTree.gen.ts          # Auto-generated Route Tree
-│   ├── index.css                 # Global Styles
-│   └── main.tsx                  # App Entry Point
-├── index.html
-├── vite.config.ts
-├── tsconfig.json
-└── package.json
+```text
+Kitchen Capacity
+       ↓
+Available Portions
+       ↓
+Availability
+       ↓
+Order Limits
+       ↓
+Cart
 ```
 
----
+The goal is not to simulate a production marketplace, but to explore how a capacity-constrained food business could be represented through product design and frontend logic.
 
-### 🚀 การติดตั้งและรันโปรเจกต์
+## What Works
 
-**ความต้องการของระบบ**
-- Node.js >= 18
-- pnpm (แนะนำ) หรือ npm
+* Dynamic food discovery using an external API
+* Category-based browsing
+* Client-side search and filtering
+* Price and availability filters
+* Product detail pages
+* Shopping cart
+* Quantity limits based on simulated availability
+* Favorites
+* Local persistence for cart and favorites
+* Mock checkout flow
+* Responsive interface
+* Loading, empty, and unavailable states
+* Toast notifications
 
-**ขั้นตอน**
+## Capacity-Aware Ordering
+
+One of the main ideas explored in the prototype is preventing customers from ordering beyond the available capacity.
+
+The available quantity is simulated from the source data and enforced in the frontend.
+
+For example:
+
+```text
+Available: 3 portions
+
+Customer attempts:
+1 → ✓
+2 → ✓
+3 → ✓
+4 → ✕
+```
+
+This demonstrates the product logic behind a capacity-constrained marketplace, even though the underlying inventory is not connected to a real backend.
+
+## Data
+
+HomeKitchen uses [TheMealDB](https://www.themealdb.com/) as a source for recipe and meal information.
+
+The project intentionally separates external data from simulated marketplace attributes.
+
+| Data                       | Source                       |
+| -------------------------- | ---------------------------- |
+| Meal name                  | TheMealDB                    |
+| Image                      | TheMealDB                    |
+| Category                   | TheMealDB                    |
+| Description / instructions | TheMealDB                    |
+| Price                      | Simulated                    |
+| Rating                     | Simulated                    |
+| Stock / capacity           | Simulated                    |
+| Availability               | Derived from simulated stock |
+| Kitchen name               | Simulated                    |
+
+This allows the frontend to demonstrate a realistic marketplace experience without requiring a backend or proprietary food database.
+
+## Architecture
+
+HomeKitchen is a **frontend-only application**.
+
+```text
+┌─────────────────────────────┐
+│          React App          │
+│                             │
+│  Pages / Components / UI    │
+│             │               │
+│     ┌───────┴────────┐      │
+│     ↓                ↓      │
+│ TheMealDB        Local State│
+│     │                │      │
+│     ↓                ↓      │
+│ Meal Data      Cart/Favorites│
+│                      │      │
+│                      ↓      │
+│                  localStorage│
+└─────────────────────────────┘
+```
+
+There is currently no:
+
+* Backend API
+* Database
+* Authentication system
+* Real payment processing
+* Real inventory service
+* Server-side order management
+
+## Tech Stack
+
+* React 19
+* TypeScript
+* Vite
+* TanStack Router
+* Tailwind CSS
+* shadcn/ui
+* Lucide React
+* React Context API
+* TheMealDB API
+* Browser `localStorage`
+
+## Key Frontend Architecture
+
+### State Management
+
+Global application state is handled with React Context:
+
+* `CartContext` — cart and mock order state
+* `FavoritesContext` — favorite items
+
+Persistent client-side state is stored using `localStorage`.
+
+### Routing
+
+TanStack Router is used for application routing:
+
+```text
+/                  Home / Discovery
+/menu/$menuId      Product Detail
+/cart              Cart
+/favorites         Favorites
+/profile           Profile
+/orders            Order History
+```
+
+### Data Fetching
+
+Meal data is retrieved from TheMealDB using the native `fetch` API.
+
+Category selection triggers a new API request, while search, price, and stock filtering are performed client-side over the fetched dataset.
+
+## Important Prototype Limitations
+
+This project is intentionally a frontend prototype, so several marketplace capabilities are simulated.
+
+### Simulated Inventory
+
+Stock and capacity are generated locally rather than retrieved from a real inventory system.
+
+### Mock Checkout
+
+Checkout creates a local mock order and clears the cart. It does not process a real transaction.
+
+### Local User Profile
+
+Profile information is managed in frontend state and is not connected to authentication or a user database.
+
+### No Backend
+
+There is no server-side business logic, database, authentication, payment system, or persistent order management.
+
+### No Automated Tests
+
+The current prototype does not include an automated test suite.
+
+These limitations are part of the current scope rather than claims of production readiness.
+
+## What I Wanted to Explore
+
+The main purpose of this project was not simply to build another food-ordering interface.
+
+I wanted to explore how a **business constraint could shape product design.**
+
+For a home kitchen, the question is not only:
+
+> "What food can customers order?"
+
+It can also be:
+
+> "How many orders can this kitchen realistically fulfill?"
+
+HomeKitchen is an early exploration of that idea through frontend implementation.
+
+## Future Direction
+
+If developed beyond the prototype, the concept could evolve toward a real marketplace with:
+
+* Kitchen accounts and profiles
+* Real inventory and daily capacity
+* Order lifecycle management
+* Kitchen-level availability
+* Customer accounts
+* Payment processing
+* Backend APIs and database
+* Capacity-aware scheduling
+* Notifications when capacity is reached
+* Analytics for kitchen operators
+
+These are potential directions rather than implemented features.
+
+## Getting Started
+
+Clone the repository and install dependencies:
 
 ```bash
-# 1. Clone โปรเจกต์
-git clone <repository-url>
-cd homekitchen-app
-
-# 2. ติดตั้ง Dependencies
-pnpm install
-
-# 3. รัน Development Server
-pnpm dev
+npm install
 ```
 
-เปิดเบราว์เซอร์แล้วไปที่ `http://localhost:5173`
-
-**คำสั่งอื่น ๆ**
+Start the development server:
 
 ```bash
-pnpm build      # Build สำหรับ Production
-pnpm preview    # Preview Production Build
-pnpm lint       # ตรวจสอบ Code ด้วย ESLint
+npm run dev
 ```
 
----
-
-### 📱 หน้าต่าง ๆ ในแอป
-
-| Route | หน้า | คำอธิบาย |
-|---|---|---|
-| `/` | หน้าแรก | แสดงเมนูทั้งหมด พร้อมค้นหาและกรอง |
-| `/menu/:menuId` | รายละเอียดเมนู | ส่วนผสม วิธีทำ และเพิ่มลงตะกร้า |
-| `/cart` | ตะกร้าสินค้า | จัดการรายการและ Checkout |
-| `/favorites` | รายการโปรด | เมนูที่บันทึกไว้ |
-| `/profile` | โปรไฟล์ | ข้อมูลส่วนตัวและประวัติคำสั่งซื้อ |
-
----
-
-### 🗒️ หมายเหตุ
-
-> ข้อมูลเมนูอาหารดึงมาจาก [TheMealDB API](https://www.themealdb.com/) (Open Source)  
-> ราคา, เรตติ้ง และสต็อกสินค้าเป็นค่าจำลอง (Simulated) ที่คำนวณจาก Meal ID เพื่อให้ข้อมูลสอดคล้องกันทั้งแอป
-
----
-
-<br/>
-
----
-
-## 🇬🇧 English
-
-<div align="center">
-
-### HomeKitchen — Order Home-Cooked Meals from Local Kitchens
-
-A food ordering app connecting people with home-cooked meals from community kitchens.  
-Built with **React 19**, **TypeScript**, **TailwindCSS v4**, and the **TanStack** ecosystem.
-
-</div>
-
----
-
-### 📋 Table of Contents
-
-- [Features](#-features)
-- [Tech Stack](#-tech-stack-en)
-- [Project Structure](#-project-structure)
-- [Installation & Running](#-installation--running)
-- [App Pages & Routes](#-app-pages--routes)
-
----
-
-### ✨ Features
-
-| Feature | Description |
-|---|---|
-| 🔍 **Real-time Search** | Instant search with 300ms debounce synced to URL Search Params |
-| 🗂️ **Category Filter** | Filter meals by category (Beef, Chicken, Vegetarian, Seafood, Pasta, Dessert) |
-| 💰 **Price Filter** | Filter by price range (Under ฿150 / ฿150–200 / Over ฿200) |
-| 📦 **Stock Filter** | Show only currently available meals |
-| 🛒 **Shopping Cart** | Add / adjust / remove items with auto-calculated subtotal and delivery fee |
-| ❤️ **Favorites** | Save your favorite meals and access them anytime |
-| 📄 **Meal Detail** | View ingredients, cooking instructions, rating, prep time, and live stock |
-| 👤 **Profile** | Edit personal information and view order history |
-| 📜 **Order History** | All past orders recorded after checkout |
-
----
-
-### 🛠️ Tech Stack (EN)
-
-**Frontend Core**
-- [React 19](https://react.dev/) — UI Library with React Compiler enabled
-- [TypeScript ~6.0](https://www.typescriptlang.org/) — Type-safe JavaScript
-- [Vite 8](https://vitejs.dev/) — Lightning-fast build tool & dev server
-
-**Routing & Data Fetching**
-- [TanStack Router v1](https://tanstack.com/router) — Type-safe file-based routing
-- [TanStack Query v5](https://tanstack.com/query) — Server state management & caching
-
-**UI & Styling**
-- [TailwindCSS v4](https://tailwindcss.com/) — Utility-first CSS framework
-- [shadcn/ui](https://ui.shadcn.com/) — Accessible component library (powered by Base UI)
-- [Lucide React](https://lucide.dev/) — Beautiful open-source icons
-- [Sonner](https://sonner.emilkowal.ski/) — Toast notification system
-- [Inter Variable Font](https://rsms.me/inter/) — Modern typography
-
-**Forms & Validation**
-- [React Hook Form v7](https://react-hook-form.com/) — Performant form management
-- [Zod v4](https://zod.dev/) — TypeScript-first schema validation
-
-**State Management**
-- React Context API — `CartContext` (cart + order history), `FavoritesContext`
-
----
-
-### 📁 Project Structure
-
-```
-homekitchen-app/
-├── src/
-│   ├── components/
-│   │   ├── common/
-│   │   │   └── Header.tsx        # Sticky header with debounced search & cart badge
-│   │   └── ui/                   # shadcn/ui components
-│   ├── context/
-│   │   ├── CartContext.tsx        # Global cart state + order history
-│   │   └── FavoritesContext.tsx  # Global favorites state
-│   ├── hooks/
-│   │   ├── useCart.ts            # Consumer hook for CartContext
-│   │   └── useFavorites.ts       # Consumer hook for FavoritesContext
-│   ├── lib/
-│   │   └── queryClient.ts        # TanStack Query client configuration
-│   ├── routes/
-│   │   ├── __root.tsx            # Root layout (Header + all Providers)
-│   │   ├── index.tsx             # Home — full meal listing with filters
-│   │   ├── menu.$menuId.tsx      # Meal detail page (dynamic route)
-│   │   ├── cart.tsx              # Shopping cart & checkout
-│   │   ├── favorites.tsx         # Saved favorites
-│   │   ├── profile.tsx           # User profile & order history
-│   │   └── orders.tsx            # Orders page
-│   ├── routeTree.gen.ts          # Auto-generated route tree (TanStack Router)
-│   ├── index.css                 # Global styles
-│   └── main.tsx                  # Application entry point
-├── index.html
-├── vite.config.ts
-├── tsconfig.json
-└── package.json
-```
-
----
-
-### 🚀 Installation & Running
-
-**Prerequisites**
-- Node.js >= 18
-- pnpm (recommended) or npm
-
-**Steps**
+Build for production:
 
 ```bash
-# 1. Clone the repository
-git clone <repository-url>
-cd homekitchen-app
-
-# 2. Install dependencies
-pnpm install
-
-# 3. Start the development server
-pnpm dev
+npm run build
 ```
 
-Open your browser and navigate to `http://localhost:5173`
+## Project Status
 
-**Other Commands**
+**Frontend prototype — completed**
 
-```bash
-pnpm build      # Build for production
-pnpm preview    # Preview the production build locally
-pnpm lint       # Lint the codebase with ESLint
-```
+The current version focuses on exploring the product concept and implementing the core customer-facing experience on the frontend.
 
----
+It is not intended to represent a production-ready food marketplace.
 
-### 📱 App Pages & Routes
+## Author
 
-| Route | Page | Description |
-|---|---|---|
-| `/` | Home | Browse all meals with search & filters |
-| `/menu/:menuId` | Meal Detail | Ingredients, instructions & add-to-cart |
-| `/cart` | Shopping Cart | Manage items & proceed to checkout |
-| `/favorites` | Favorites | All saved favorite meals |
-| `/profile` | Profile | Personal info & purchase history |
-
----
-
-### 🗒️ Notes
-
-> Meal data is fetched from [TheMealDB API](https://www.themealdb.com/) (Open Source).  
-> Pricing, ratings, and stock levels are **simulated values** derived deterministically from each Meal ID to ensure data consistency across all pages.
-
----
-
-<div align="center">
-
-Made with ❤️ &nbsp;·&nbsp; HomeKitchen 2026
-
-</div>
+Built as a frontend development project while exploring the intersection of **software development, product thinking, and real-world business constraints.**
